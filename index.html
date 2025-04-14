@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CASE INTERFACE // MANHUNT</title>
+  <style>
+    body {
+      background-color: #0a0a0a;
+      color: #ffbf66;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 2rem;
+      margin: 0;
+    }
+    .terminal {
+      max-width: 960px;
+      margin: auto;
+      border: 2px solid #ffbf66;
+      padding: 1.5rem;
+      background-color: #111;
+      box-shadow: 0 0 30px rgba(255, 191, 102, 0.2);
+      display: none;
+    }
+    .line {
+      margin: 0.5em 0;
+    }
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 16px;
+      background: #ffbf66;
+      animation: blink 1s infinite;
+      vertical-align: middle;
+    }
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+    iframe {
+      width: 100%;
+      height: 450px;
+      border: 1px solid #ffbf66;
+      margin-top: 1rem;
+    }
+    h2 {
+      color: #ffbf66;
+      border-bottom: 1px dashed #ffbf66;
+      padding-bottom: 0.5em;
+    }
+    #auth {
+      max-width: 400px;
+      margin: 6rem auto 3rem auto;
+      padding: 2rem;
+      border: 2px solid #ffbf66;
+      background: #111;
+      text-align: center;
+    }
+    input[type="password"] {
+      background: #0a0a0a;
+      border: 1px solid #ffbf66;
+      color: #ffbf66;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 0.5rem;
+      width: 100%;
+      margin-top: 1rem;
+    }
+    button {
+      margin-top: 1rem;
+      background-color: #ffbf66;
+      border: none;
+      padding: 0.5rem 1rem;
+      color: #0a0a0a;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .error {
+      color: red;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="auth">
+    <div>> ACCESS RESTRICTED: AUTHORIZATION REQUIRED</div>
+    <input type="password" id="password" placeholder="Enter access code...">
+    <button onclick="checkPassword()">ENTER</button>
+    <div class="error" id="error"></div>
+  </div>
+
+  <div class="terminal" id="dashboard">
+    <div class="line">> SYSTEM BOOTING...</div>
+    <div class="line">> Initializing Field Console [V1.89]</div>
+    <div class="line">> Verifying Agent Credentials...</div>
+    <div class="line">> Status: CLEARED</div>
+    <div class="line">> Loading interface <span class="cursor"></span></div>
+
+    <h2>📝 SUBMIT REPORT</h2>
+    <iframe src="https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true"></iframe>
+
+    <h2>🔴 SURVEILLANCE FEED</h2>
+    <iframe src="https://www.youtube.com/embed/YOUR_YOUTUBE_ID" allowfullscreen></iframe>
+
+    <h2>📊 CASE FILE OUTPUT</h2>
+    <iframe src="https://docs.google.com/spreadsheets/d/e/YOUR_SHEET_EMBED_ID/pubhtml?widget=true&amp;headers=false"></iframe>
+  </div>
+
+  <script>
+    const ACCESS_CODE = "echo1989"; // 🔐 Set your secret access code here
+
+    function checkPassword() {
+      const input = document.getElementById('password').value.trim();
+      const errorBox = document.getElementById('error');
+
+      if (input === ACCESS_CODE) {
+        document.getElementById('auth').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+      } else {
+        errorBox.textContent = "ACCESS DENIED. INVALID CODE.";
+      }
+    }
+  </script>
+</body>
+</html>
