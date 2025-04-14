@@ -15,12 +15,13 @@
       margin: 0;
       background-image: repeating-linear-gradient(
         to bottom,
-        rgba(255, 191, 102, 0.04) 0px,
-        rgba(255, 191, 102, 0.04) 1px,
+        rgba(255, 191, 102, 0.08) 0px,
+        rgba(255, 191, 102, 0.08) 1px,
         transparent 1px,
-        transparent 4px
+        transparent 3px
       );
-      background-size: 100% 4px;
+      background-size: 100% 3px;
+      animation: crtFlicker 0.15s infinite alternate;
     }
 
     .terminal {
@@ -51,6 +52,19 @@
 
     @keyframes blink {
       0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    @keyframes crtFlicker {
+      0% {
+        opacity: 0.96;
+        filter: brightness(0.97) contrast(1.02);
+      }
+      100% {
+        opacity: 1;
+        filter: brightness(1.02) contrast(0.98);
+      }
+    }
       51%, 100% { opacity: 0; }
     }
 
@@ -117,13 +131,13 @@
     <div class="line">&gt; Status: CLEARED</div>
     <div class="line">&gt; Loading interface <span class="cursor"></span></div>
 
-    <h2>📝 SUBMIT REPORT</h2>
+    <h2>&gt; SUBMIT REPORT</h2>
     <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfHsbzUm4QBPdhCsU1QVg1zl8G4LyN5nnew2NvMa3knQe2plw/viewform?embedded=true"></iframe>
 
     <h2>🔴 SURVEILLANCE FEED</h2>
     <iframe src="https://www.youtube.com/embed/YOUR_YOUTUBE_ID" allowfullscreen></iframe>
 
-    <h2>📊 CASE FILE OUTPUT</h2>
+    <h2>&gt; CASE FILE OUTPUT</h2>
     <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKNJG-yM1vz4leQjfEV8nxLlUEiMuO-H7XRuT1z7CKbIw5ddrUla8pHJc/pubhtml?gid=146694499&single=true&widget=true&headers=false"></iframe>
   </div>
 
