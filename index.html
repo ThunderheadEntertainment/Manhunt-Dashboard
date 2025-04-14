@@ -183,7 +183,8 @@
     .then(response => response.text())
     .then(csv => {
       const headers = ["Team", "Clue 1", "Clue 2", "Clue 3", "Total"];
-      const rows = csv.trim().split('\n').slice(1).map(row => {
+      const rows = csv.trim().split('
+').slice(1).map(row => {
         const parts = row.split(',');
         return [parts[0], parts[5], parts[7], parts[9], parts[parts.length - 1]];
       });
@@ -204,7 +205,7 @@
         headerRow.appendChild(th);
       });
       table.appendChild(headerRow);
-    }
+
       rows.forEach((row, index) => {
         const tr = document.createElement('tr');
         row.forEach(cell => {
@@ -224,41 +225,8 @@
 
       container.appendChild(table);
     });
-function loadEvidenceLog() {
-  fetch('https://docs.google.com/spreadsheets/d/e/YOUR_EVIDENCE_SHEET_ID/pub?output=csv')
-    .then(response => response.text())
-    .then(csv => {
-      const rows = csv.trim().split('\n')
-.slice(1).map(row => row.split(','));
-      const container = document.getElementById('evidence-log');
-      container.innerHTML = '';
-
-      rows.forEach(row => {
-        const [time, type, title, url] = row;
-        const div = document.createElement('div');
-
-        let link = document.createElement('a');
-        link.href = url;
-        link.target = '_blank';
-        link.style.color = '#ffbf66';
-        link.style.textDecoration = 'underline';
-
-        if (type.toLowerCase() === 'image') {
-          link.textContent = `[IMG] ${title}`;
-        } else if (type.toLowerCase() === 'audio') {
-          link.textContent = `[AUDIO] ${title}`;
-        } else {
-          link.textContent = `[FILE] ${title}`;
-        }
-
-        div.textContent = `> ${time} - `;
-        div.appendChild(link);
-        container.appendChild(div);
-      });
-    });
 }
 
-// Load immediately and refresh every 30 seconds
 loadEvidenceLog();
 setInterval(loadEvidenceLog, 30000);
 loadLeaderboard();
