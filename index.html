@@ -155,35 +155,36 @@
 <h2>&gt; EVIDENCE LOG</h2>
     <div id="evidence-log" style="background:#000; color:#ffbf66; font-family:'Share Tech Mono', monospace; padding:1rem; border:1px solid #ffbf66; max-height:400px; overflow-y:auto; white-space:normal; font-size:0.9rem; line-height:1.5;"></div>
 <script>
-    const ACCESS_CODE = "echo1989";
+const ACCESS_CODE = "echo1989";
 
-    function checkPassword() {
-      const input = document.getElementById('password').value.trim();
-      const errorBox = document.getElementById('error');
+function checkPassword() {
+  const input = document.getElementById('password').value.trim();
+  const errorBox = document.getElementById('error');
 
-      if (input === ACCESS_CODE) {
-        document.getElementById('auth').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'block';
-        typeBootSequence();
-      } else {
-        errorBox.textContent = "ACCESS DENIED. INVALID CODE.";
-      }
-    }
+  if (input === ACCESS_CODE) {
+    document.getElementById('auth').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    typeBootSequence();
+  } else {
+    errorBox.textContent = "ACCESS DENIED. INVALID CODE.";
+  }
+}
 
-    function typeBootSequence() {
-      const lines = document.querySelectorAll('.line');
-      lines.forEach((line, i) => {
-        setTimeout(() => {
-          line.style.opacity = 1;
-        }, i * 700);
-      });
-    }
-  function loadLeaderboard() {
+function typeBootSequence() {
+  const lines = document.querySelectorAll('.line');
+  lines.forEach((line, i) => {
+    setTimeout(() => {
+      line.style.opacity = 1;
+    }, i * 700);
+  });
+}
+
+function loadLeaderboard() {
   fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKNJG-yM1vz4leQjfEV8nxLlUEiMuO-H7XRuT1z7CKbIw5ddrUla8pHJc/pub?output=csv')
     .then(response => response.text())
     .then(csv => {
       const headers = ["Team", "Clue 1", "Clue 2", "Clue 3", "Total"];
-      const rows = csv.trim().split('\n').slice(1).map(row => row.split(','));
+      const rows = csv.trim().split('\n').slice(1).map(row => {
         const parts = row.split(',');
         return [parts[0], parts[5], parts[7], parts[9], parts[parts.length - 1]];
       });
@@ -226,11 +227,8 @@
     });
 }
 
-loadEvidenceLog();
-setInterval(loadEvidenceLog, 30000);
-loadLeaderboard();
 function loadEvidenceLog() {
-  fetch('https://docs.google.com/spreadsheets/d/e/YOUR_EVIDENCE_SHEET_ID/pub?output=csv')
+  fetch('https://docs.google.com/spreadsheets/d/e/https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKNJG-yM1vz4leQjfEV8nxLlUEiMuO-H7XRuT1z7CKbIw5ddrUla8pHJc/pubhtml?gid=960108141&single=true/pub?output=csv')
     .then(response => response.text())
     .then(csv => {
       const rows = csv.trim().split('\n').slice(1).map(row => row.split(','));
@@ -262,6 +260,8 @@ function loadEvidenceLog() {
     });
 }
 
+// Run both on load
+loadLeaderboard();
 loadEvidenceLog();
 setInterval(loadEvidenceLog, 30000);
 </script>
