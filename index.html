@@ -180,8 +180,7 @@
   fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKNJG-yM1vz4leQjfEV8nxLlUEiMuO-H7XRuT1z7CKbIw5ddrUla8pHJc/pub?output=csv')
   .then(response => response.text())
   .then(csv => {
-    const rows = csv.trim().split('
-').map(row => row.split(',')).map(row => [row[0], row[5], row[7], row[9], row[row.length - 1]]);
+    const rows = csv.trim().split('\n').map(row => row.split(',')).map(row => [row[0], row[5], row[7], row[9], row[row.length - 1]]);
     const container = document.getElementById('intel');
     const headers = rows.shift();
 
