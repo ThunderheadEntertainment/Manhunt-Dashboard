@@ -21,7 +21,7 @@
         transparent 3px
       );
       background-size: 100% 3px;
-      animation: crtFlicker 0.15s infinite alternate;
+      animation: crtFlicker 1.15s infinite alternate;
     }
 
     .terminal {
@@ -140,7 +140,8 @@
     <div class="line">&gt; Initializing Field Console [V1.89]</div>
     <div class="line">&gt; Verifying Agent Credentials...</div>
     <div class="line">&gt; Status: CLEARED</div>
-    <div class="line">&gt; Loading interface <span class="cursor"></span></div>
+    <div class="line">&gt; Loading interface...</div>
+     <div class="line">&gt; LOADED <span class="cursor"></span></div>
 
     <h2>&gt; SUBMIT REPORT</h2>
     <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfHsbzUm4QBPdhCsU1QVg1zl8G4LyN5nnew2NvMa3knQe2plw/viewform?embedded=true"></iframe>
@@ -149,7 +150,7 @@
     <iframe src="https://www.youtube.com/embed/YOUR_YOUTUBE_ID" allowfullscreen></iframe>
 
     
-  <h2>&gt; AGENCY INTEL SCROLL VIEW</h2>
+  <h2>&gt; AGENCY INTEL VIEW</h2>
     <div id="intel" style="background:#000; color:#ffbf66; font-family:'Share Tech Mono', monospace; padding:1rem; border:1px solid #ffbf66; max-height:400px; overflow-y:auto; white-space:nowrap; font-size:0.9rem;"></div>
 
 <h2>&gt; EVIDENCE LOG</h2>
@@ -231,7 +232,7 @@ function loadEvidenceLog() {
   fetch('https://docs.google.com/spreadsheets/d/e/https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKNJG-yM1vz4leQjfEV8nxLlUEiMuO-H7XRuT1z7CKbIw5ddrUla8pHJc/pubhtml?gid=960108141&single=true/pub?output=csv')
     .then(response => response.text())
     .then(csv => {
-      const rows = csv.trim().split('\n').slice(1).map(row => row.split(','));
+      const rows = csv.trim().split('\n').map(row => row.split(','));
       const container = document.getElementById('evidence-log');
       container.innerHTML = '';
 
