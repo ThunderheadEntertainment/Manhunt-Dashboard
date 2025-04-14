@@ -5,13 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CASE INTERFACE // MANHUNT</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
     body {
       background-color: #0a0a0a;
       color: #ffbf66;
-      font-family: 'Courier New', Courier, monospace;
+      font-family: 'Share Tech Mono', monospace;
       padding: 2rem;
       margin: 0;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 191, 102, 0.04) 0px,
+        rgba(255, 191, 102, 0.04) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+      background-size: 100% 4px;
     }
+
     .terminal {
       max-width: 960px;
       margin: auto;
@@ -21,9 +32,14 @@
       box-shadow: 0 0 30px rgba(255, 191, 102, 0.2);
       display: none;
     }
+
     .line {
       margin: 0.5em 0;
+      opacity: 0;
+      white-space: nowrap;
+      overflow: hidden;
     }
+
     .cursor {
       display: inline-block;
       width: 10px;
@@ -32,21 +48,25 @@
       animation: blink 1s infinite;
       vertical-align: middle;
     }
+
     @keyframes blink {
       0%, 50% { opacity: 1; }
       51%, 100% { opacity: 0; }
     }
+
     iframe {
       width: 100%;
       height: 450px;
       border: 1px solid #ffbf66;
       margin-top: 1rem;
     }
+
     h2 {
       color: #ffbf66;
       border-bottom: 1px dashed #ffbf66;
       padding-bottom: 0.5em;
     }
+
     #auth {
       max-width: 400px;
       margin: 6rem auto 3rem auto;
@@ -55,15 +75,17 @@
       background: #111;
       text-align: center;
     }
+
     input[type="password"] {
       background: #0a0a0a;
       border: 1px solid #ffbf66;
       color: #ffbf66;
-      font-family: 'Courier New', Courier, monospace;
+      font-family: 'Share Tech Mono', monospace;
       padding: 0.5rem;
       width: 100%;
       margin-top: 1rem;
     }
+
     button {
       margin-top: 1rem;
       background-color: #ffbf66;
@@ -73,6 +95,7 @@
       font-weight: bold;
       cursor: pointer;
     }
+
     .error {
       color: red;
       margin-top: 1rem;
@@ -88,24 +111,24 @@
   </div>
 
   <div class="terminal" id="dashboard">
-    <div class="line">> SYSTEM BOOTING...</div>
-    <div class="line">> Initializing Field Console [V1.89]</div>
-    <div class="line">> Verifying Agent Credentials...</div>
-    <div class="line">> Status: CLEARED</div>
-    <div class="line">> Loading interface <span class="cursor"></span></div>
+    <div class="line">&gt; SYSTEM BOOTING...</div>
+    <div class="line">&gt; Initializing Field Console [V1.89]</div>
+    <div class="line">&gt; Verifying Agent Credentials...</div>
+    <div class="line">&gt; Status: CLEARED</div>
+    <div class="line">&gt; Loading interface <span class="cursor"></span></div>
 
     <h2>📝 SUBMIT REPORT</h2>
-    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfHsbzUm4QBPdhCsU1QVg1zl8G4LyN5nnew2NvMa3knQe2plw/viewform?usp=header"></iframe>
+    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfHsbzUm4QBPdhCsU1QVg1zl8G4LyN5nnew2NvMa3knQe2plw/viewform?embedded=true"></iframe>
 
     <h2>🔴 SURVEILLANCE FEED</h2>
     <iframe src="https://www.youtube.com/embed/YOUR_YOUTUBE_ID" allowfullscreen></iframe>
 
     <h2>📊 CASE FILE OUTPUT</h2>
-    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKNJG-yM1vz4leQjfEV8nxLlUEiMuO-H7XRuT1z7CKbIw5ddrUla8pHJc/pubhtml?gid=146694499&single=true"></iframe>
+    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKNJG-yM1vz4leQjfEV8nxLlUEiMuO-H7XRuT1z7CKbIw5ddrUla8pHJc/pubhtml?gid=146694499&single=true&widget=true&headers=false"></iframe>
   </div>
 
   <script>
-    const ACCESS_CODE = "echo1989"; // 🔐 Set your secret access code here
+    const ACCESS_CODE = "echo1989";
 
     function checkPassword() {
       const input = document.getElementById('password').value.trim();
@@ -114,9 +137,19 @@
       if (input === ACCESS_CODE) {
         document.getElementById('auth').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
+        typeBootSequence();
       } else {
         errorBox.textContent = "ACCESS DENIED. INVALID CODE.";
       }
+    }
+
+    function typeBootSequence() {
+      const lines = document.querySelectorAll('.line');
+      lines.forEach((line, i) => {
+        setTimeout(() => {
+          line.style.opacity = 1;
+        }, i * 700);
+      });
     }
   </script>
 </body>
