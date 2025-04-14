@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CASE INTERFACE // CrimeWAVE</title>
+  <title>CASE INTERFACE // MANHUNT</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
@@ -21,7 +21,7 @@
         transparent 3px
       );
       background-size: 100% 3px;
-      animation: crtFlicker 0.75s infinite alternate;
+      animation: crtFlicker 0.15s infinite alternate;
     }
 
     .terminal {
@@ -140,20 +140,21 @@
     <div class="line">&gt; Initializing Field Console [V1.89]</div>
     <div class="line">&gt; Verifying Agent Credentials...</div>
     <div class="line">&gt; Status: CLEARED</div>
-    <div class="line">&gt; Loading interface</div>
-    <div class="line">&gt; LOADED <span class="cursor"></span></div>
+    <div class="line">&gt; Loading interface <span class="cursor"></span></div>
 
     <h2>&gt; SUBMIT REPORT</h2>
     <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfHsbzUm4QBPdhCsU1QVg1zl8G4LyN5nnew2NvMa3knQe2plw/viewform?embedded=true"></iframe>
 
     <h2>🔴 SURVEILLANCE FEED</h2>
-    <iframe src="https://www.youtube.com/embed/tzHWGrxSj20?si=AjpccTz8vdwsHG2D" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <iframe src="https://www.youtube.com/embed/YOUR_YOUTUBE_ID" allowfullscreen></iframe>
 
     <h2>&gt; CASE FILE OUTPUT</h2>
     <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKNJG-yM1vz4leQjfEV8nxLlUEiMuO-H7XRuT1z7CKbIw5ddrUla8pHJc/pubhtml?gid=146694499&single=true&widget=true&headers=false"></iframe>
-  </div>
+  <h2>&gt; AGENCY INTEL SCROLL VIEW</h2>
+    <div id="intel" style="background:#000; color:#ffbf66; font-family:'Share Tech Mono', monospace; padding:1rem; border:1px solid #ffbf66; max-height:400px; overflow-y:auto; white-space:nowrap; font-size:0.9rem;"></div>
 
-  <script>
+</div>
+<script>
     const ACCESS_CODE = "echo1989";
 
     function checkPassword() {
@@ -177,6 +178,48 @@
         }, i * 700);
       });
     }
-  </script>
+  fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKNJG-yM1vz4leQjfEV8nxLlUEiMuO-H7XRuT1z7CKbIw5ddrUla8pHJc/pub?output=csv')
+  .then(response => response.text())
+  .then(csv => {
+    const rows = csv.trim().split('
+').map(row => row.split(','));
+    const container = document.getElementById('intel');
+    const headers = rows.shift();
+
+    // Build table
+    const table = document.createElement('table');
+    table.style.width = '100%';
+    table.style.borderCollapse = 'collapse';
+
+    const headerRow = document.createElement('tr');
+    headers.forEach(header => {
+      const th = document.createElement('th');
+      th.textContent = header;
+      th.style.borderBottom = '1px dashed #ffbf66';
+      th.style.padding = '4px';
+      headerRow.appendChild(th);
+    });
+    table.appendChild(headerRow);
+
+    rows.forEach((row, index) => {
+      const tr = document.createElement('tr');
+      row.forEach(cell => {
+        const td = document.createElement('td');
+        td.textContent = cell;
+        td.style.padding = '2px 6px';
+        td.style.borderBottom = '1px dotted #333';
+        tr.appendChild(td);
+      });
+
+      if (index === 0) tr.style.backgroundColor = '#FFD700'; // Gold
+      if (index === 1) tr.style.backgroundColor = '#C0C0C0'; // Silver
+      if (index === 2) tr.style.backgroundColor = '#cd7f32'; // Bronze
+
+      table.appendChild(tr);
+    });
+
+    container.appendChild(table);
+  });
+</script>
 </body>
 </html>
