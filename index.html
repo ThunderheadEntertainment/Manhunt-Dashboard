@@ -148,8 +148,7 @@
     <h2>🔴 SURVEILLANCE FEED</h2>
     <iframe src="https://www.youtube.com/embed/YOUR_YOUTUBE_ID" allowfullscreen></iframe>
 
-    <h2>&gt; CASE FILE OUTPUT</h2>
-    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKNJG-yM1vz4leQjfEV8nxLlUEiMuO-H7XRuT1z7CKbIw5ddrUla8pHJc/pubhtml?gid=146694499&single=true&widget=true&headers=false"></iframe>
+    
   <h2>&gt; AGENCY INTEL SCROLL VIEW</h2>
     <div id="intel" style="background:#000; color:#ffbf66; font-family:'Share Tech Mono', monospace; padding:1rem; border:1px solid #ffbf66; max-height:400px; overflow-y:auto; white-space:nowrap; font-size:0.9rem;"></div>
 
@@ -181,7 +180,8 @@
   fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKNJG-yM1vz4leQjfEV8nxLlUEiMuO-H7XRuT1z7CKbIw5ddrUla8pHJc/pub?output=csv')
   .then(response => response.text())
   .then(csv => {
-    const rows = csv.trim().split('\n').map(row => row.split(','));
+    const rows = csv.trim().split('
+').map(row => row.split(',')).map(row => [row[0], row[5], row[7], row[9], row[row.length - 1]]);
     const container = document.getElementById('intel');
     const headers = rows.shift();
 
