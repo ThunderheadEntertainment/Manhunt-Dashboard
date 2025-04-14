@@ -236,28 +236,29 @@ function loadEvidenceLog() {
       const container = document.getElementById('evidence-log');
       container.innerHTML = '';
 
-      rows.forEach(row => {
-        const [time, type, title, url] = row;
-        const div = document.createElement('div');
+      rows.forEach((row, index) => {
+  const [time, type, title, url, visible] = row;
+  if (index === 0 || visible.trim() !== "1") return; // skip header + hidden rows
 
-        let link = document.createElement('a');
-        link.href = url;
-        link.target = '_blank';
-        link.style.color = '#ffbf66';
-        link.style.textDecoration = 'underline';
+  const div = document.createElement('div');
+  let link = document.createElement('a');
+  link.href = url;
+  link.target = '_blank';
+  link.style.color = '#ffbf66';
+  link.style.textDecoration = 'underline';
 
-        if (type.toLowerCase() === 'image') {
-          link.textContent = `[IMG] ${title}`;
-        } else if (type.toLowerCase() === 'audio') {
-          link.textContent = `[AUDIO] ${title}`;
-        } else {
-          link.textContent = `[FILE] ${title}`;
-        }
+  if (type.toLowerCase() === 'image') {
+    link.textContent = `[IMG] ${title}`;
+  } else if (type.toLowerCase() === 'audio') {
+    link.textContent = `[AUDIO] ${title}`;
+  } else {
+    link.textContent = `[FILE] ${title}`;
+  }
 
-        div.textContent = `> ${time} - `;
-        div.appendChild(link);
-        container.appendChild(div);
-      });
+  div.textContent = `> ${time} - `;
+  div.appendChild(link);
+  container.appendChild(div);
+});
     });
 }
 
