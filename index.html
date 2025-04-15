@@ -184,10 +184,10 @@ function loadLeaderboard() {
   fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKNJG-yM1vz4leQjfEV8nxLlUEiMuO-H7XRuT1z7CKbIw5ddrUla8pHJc/pub?output=csv')
     .then(response => response.text())
     .then(csv => {
-      const headers = ["Team", "Clue 1", "Clue 2", "Clue 3", "Total"];
+      const headers = ["Team", "Clue 1", "Clue 2", "Clue 3", "Clue 4", "Clue 5", "Clue 6", "Bonus", "Total"];
       const rows = csv.trim().split('\n').slice(1).map(row => {
         const parts = row.split(',');
-        return [parts[0], parts[5], parts[7], parts[9], parts[parts.length - 1]];
+        return [parts[0], parts[5], parts[7], parts[9], parts[11], parts[13], parts[15], parts[16], parts[parts.length - 1]];
       });
 
       const container = document.getElementById('intel');
