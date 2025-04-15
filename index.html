@@ -245,11 +245,13 @@ function loadEvidenceLog() {
       const visibleIdx = headers.indexOf("visible");
 
       // Add header row
+     // Add custom header row with only Type and Title
       const header = document.createElement('div');
-      header.textContent = `> ${rows[0].join(' | ')}`;
+      header.textContent = '> Type | Title | Location';
       header.style.fontWeight = 'bold';
       header.style.marginBottom = '0.5em';
       container.appendChild(header);
+
 
       let evidenceCount = 0;
 
