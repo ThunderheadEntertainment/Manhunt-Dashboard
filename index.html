@@ -229,45 +229,62 @@ fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKN
 }
 
 function loadEvidenceLog() {
- fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKNJG-yM1vz4leQjfEV8nxLlUEiMuO-H7XRuT1z7CKbIw5ddrUla8pHJc/pub?gid=960108141&single=true&output=csv&cachebuster=' + new Date().getTime())
+  const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKNJG-yM1vz4leQjfEV8nxLlUEiMuO-H7XRuT1z7CKbIw5ddrUla8pHJc/pub?gid=960108141&single=true&output=csv&cachebuster=' + new Date().getTime();
+
+  fetch(csvUrl)
     .then(response => response.text())
     .then(csv => {
       const rows = csv.trim().split('\n').map(row => row.split(','));
       const container = document.getElementById('evidence-log');
       container.innerHTML = '';
 
-      rows.forEach((row, index) => {
-  const [time, type, title, url, visible] = row;
-  if (index === 0) {
-  const header = document.createElement('div');
-  header.textContent = `> ${row.join(' | ')}`;
-  header.style.fontWeight = 'bold';
-  header.style.marginBottom = '0.5em';
-  container.appendChild(header);
-  return;
-}
-if (visible.trim() !== "1") return;
-// skip header + hidden rows
+      const headers = rows[0].map(h => h.trim().toLowerCase());
+      const typeIdx = headers.indexOf("type");
+      const titleIdx = headers.indexOf("title");
+      const urlIdx = headers.findIndex(h => h.includes("location") || h.includes("url"));
+      const visibleIdx = headers.indexOf("visible");
 
-  const div = document.createElement('div');
-  let link = document.createElement('a');
-  link.href = url;
-  link.target = '_blank';
-  link.style.color = '#ffbf66';
-  link.style.textDecoration = 'underline';
+      let evidenceCount = 0;
 
-  if (type.toLowerCase() === 'image') {
-    link.textContent = `[IMG] ${title}`;
-  } else if (type.toLowerCase() === 'audio') {
-    link.textContent = `[AUDIO] ${title}`;
-  } else {
-    link.textContent = `[FILE] ${title}`;
-  }
+      for (let i = 1; i < rows.length; i++) {
+        const row = rows[i];
 
-  div.textContent = `> ${time} - `;
-  div.appendChild(link);
-  container.appendChild(div);
-});
+        if (!row[visibleIdx] || row[visibleIdx].trim() !== "1") continue;
+
+        const type = row[typeIdx] || '';
+        const title = row[titleIdx] || '';
+        const url = row[urlIdx] || '';
+
+        const div = document.createElement('div');
+        let link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.style.color = '#ffbf66';
+        link.style.textDecoration = 'underline';
+
+        if (type.toLowerCase() === 'image' || type.toLowerCase() === 'photo') {
+          link.textContent = `[IMG] ${title}`;
+        } else if (type.toLowerCase() === 'audio') {
+          link.textContent = `[AUDIO] ${title}`;
+        } else {
+          link.textContent = `[FILE] ${title}`;
+        }
+
+        div.textContent = '> ';
+        div.appendChild(link);
+        container.appendChild(div);
+
+        evidenceCount++;
+      }
+
+      // Fallback if no visible evidence
+      if (evidenceCount === 0) {
+        const fallback = document.createElement('div');
+        fallback.textContent = '> No new evidence at this time.';
+        fallback.style.opacity = 0.5;
+        fallback.style.fontStyle = 'italic';
+        container.appendChild(fallback);
+      }
     });
 }
 
