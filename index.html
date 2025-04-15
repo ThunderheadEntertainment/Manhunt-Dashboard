@@ -21,7 +21,7 @@
         transparent 3px
       );
       background-size: 100% 3px;
-      animation: crtFlicker 1.15s infinite alternate;
+      animation: crtFlicker 0.85s infinite alternate;
     }
 
     .terminal {
@@ -273,6 +273,7 @@ if (visible.trim() !== "1") return;
 
 // Run both on load
 loadLeaderboard();
+setInterval(loadLeaderboard, 30000);
 loadEvidenceLog();
 setInterval(loadEvidenceLog, 30000);
 </script>
