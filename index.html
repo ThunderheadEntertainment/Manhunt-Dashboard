@@ -142,6 +142,9 @@
     <div class="line">&gt; Status: CLEARED</div>
     <div class="line">&gt; Loading interface...</div>
     <div class="line">&gt; LOADED <span class="cursor"></span></div>
+    <div style="text-align: right; margin-top: 1rem;">
+    <button onclick="logout()">LOGOUT</button>
+  </div>
 
     <h2>&gt; SUBMIT REPORT</h2>
     <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfHsbzUm4QBPdhCsU1QVg1zl8G4LyN5nnew2NvMa3knQe2plw/viewform?embedded=true"></iframe>
@@ -157,12 +160,25 @@
 
 <script>
 const ACCESS_CODE = "echo1989";
+window.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('manhunt_access') === 'granted') {
+    document.getElementById('auth').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    typeBootSequence();
+  }
+});
 
+function logout() {
+  localStorage.removeItem('manhunt_access');
+  location.reload();
+}
+  
 function checkPassword() {
   const input = document.getElementById('password').value.trim();
   const errorBox = document.getElementById('error');
 
   if (input === ACCESS_CODE) {
+    localStorage.setItem('manhunt_access', 'granted');
     document.getElementById('auth').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
     typeBootSequence();
