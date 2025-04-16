@@ -149,12 +149,12 @@
     <h2>🔴 SURVEILLANCE FEED</h2>
     <iframe src="https://www.youtube.com/embed/YOUR_YOUTUBE_ID" allowfullscreen></iframe>
 
-    
-  <h2>&gt; AGENCY INTEL VIEW</h2>
+    <h2>&gt; AGENCY INTEL VIEW</h2>
     <div id="intel" style="background:#000; color:#ffbf66; font-family:'Share Tech Mono', monospace; padding:1rem; border:1px solid #ffbf66; max-height:400px; overflow-y:auto; white-space:nowrap; font-size:0.9rem;"></div>
 
-<h2>&gt; EVIDENCE LOG</h2>
+    <h2>&gt; EVIDENCE LOG</h2>
     <div id="evidence-log" style="background:#000; color:#ffbf66; font-family:'Share Tech Mono', monospace; padding:1rem; border:1px solid #ffbf66; max-height:400px; overflow-y:auto; white-space:normal; font-size:0.9rem; line-height:1.5;"></div>
+
 <script>
 const ACCESS_CODE = "echo1989";
 
@@ -180,15 +180,39 @@ function typeBootSequence() {
   });
 }
 
+function parseCSV(text) {
+  const rows = [];
+  let insideQuote = false, row = [], cell = '';
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i], next = text[i + 1];
+
+    if (char === '"' && insideQuote && next === '"') {
+      cell += '"'; i++;
+    } else if (char === '"') {
+      insideQuote = !insideQuote;
+    } else if (char === ',' && !insideQuote) {
+      row.push(cell); cell = '';
+    } else if ((char === '\n' || char === '\r') && !insideQuote) {
+      if (cell || row.length) row.push(cell);
+      if (row.length) rows.push(row);
+      row = [], cell = '';
+      if (char === '\r' && next === '\n') i++;
+    } else {
+      cell += char;
+    }
+  }
+  if (cell || row.length) row.push(cell);
+  if (row.length) rows.push(row);
+  return rows;
+}
+
 function loadLeaderboard() {
 fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKNJG-yM1vz4leQjfEV8nxLlUEiMuO-H7XRuT1z7CKbIw5ddrUla8pHJc/pub?gid=625344505&single=true&output=csv&cachebuster=' + new Date().getTime())
     .then(response => response.text())
     .then(csv => {
       const headers = ["Team", "Clue 1", "Clue 2", "Clue 3", "Clue 4", "Clue 5", "Clue 6", "Bonus", "Total"];
-      const rows = csv.trim().split('\n').slice(1).map(row => {
-        const parts = row.split(',');
-        return [parts[2], parts[4], parts[6], parts[8], parts[10], parts[12], parts[14], parts[16], parts[parts.length - 1]];
-      });
+      const rows = parseCSV(csv).slice(1);
 
       const container = document.getElementById('intel');
       container.innerHTML = '';
@@ -244,20 +268,16 @@ function loadEvidenceLog() {
       const urlIdx = headers.findIndex(h => h.includes("location") || h.includes("url"));
       const visibleIdx = headers.indexOf("visible");
 
-      // Add header row
-     // Add custom header row with only Type and Title
       const header = document.createElement('div');
       header.textContent = '> Type | Title | Location';
       header.style.fontWeight = 'bold';
       header.style.marginBottom = '0.5em';
       container.appendChild(header);
 
-
       let evidenceCount = 0;
 
       for (let i = 1; i < rows.length; i++) {
         const row = rows[i];
-
         if (!row[visibleIdx] || row[visibleIdx].trim() !== "1") continue;
 
         const type = row[typeIdx]?.trim() || '';
@@ -286,7 +306,6 @@ function loadEvidenceLog() {
         evidenceCount++;
       }
 
-      // Fallback if no visible evidence
       if (evidenceCount === 0) {
         const fallback = document.createElement('div');
         fallback.textContent = '> No new evidence at this time.';
@@ -297,7 +316,6 @@ function loadEvidenceLog() {
     });
 }
 
-// Run both on load
 loadLeaderboard();
 setInterval(loadLeaderboard, 300000);
 loadEvidenceLog();
