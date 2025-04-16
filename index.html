@@ -141,7 +141,7 @@
     <div class="line">&gt; Verifying Agent Credentials...</div>
     <div class="line">&gt; Status: CLEARED</div>
     <div class="line">&gt; Loading interface...</div>
-     <div class="line">&gt; LOADED <span class="cursor"></span></div>
+    <div class="line">&gt; LOADED <span class="cursor"></span></div>
 
     <h2>&gt; SUBMIT REPORT</h2>
     <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfHsbzUm4QBPdhCsU1QVg1zl8G4LyN5nnew2NvMa3knQe2plw/viewform?embedded=true"></iframe>
@@ -208,7 +208,7 @@ function parseCSV(text) {
 }
 
 function loadLeaderboard() {
-fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKNJG-yM1vz4leQjfEV8nxLlUEiMuO-H7XRuT1z7CKbIw5ddrUla8pHJc/pub?gid=146694499&single=true&output=csv&cachebuster=' + new Date().getTime())
+  fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKNJG-yM1vz4leQjfEV8nxLlUEiMuO-H7XRuT1z7CKbIw5ddrUla8pHJc/pub?gid=146694499&single=true&output=csv&cachebuster=' + new Date().getTime())
     .then(response => response.text())
     .then(csv => {
       const headers = ["Team", "Clue 1", "Clue 2", "Clue 3", "Clue 4", "Clue 5", "Clue 6", "Bonus", "Total"];
@@ -231,7 +231,7 @@ fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKN
       });
       table.appendChild(headerRow);
 
-      rows.forEach((row, index) => {
+      rows.forEach(row => {
         const tr = document.createElement('tr');
         const relevantCells = [
           row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]
@@ -244,6 +244,8 @@ fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKN
           td.style.borderBottom = '1px dotted #333';
           tr.appendChild(td);
         });
+
+        table.appendChild(tr);
       });
 
       container.appendChild(table);
