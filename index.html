@@ -156,9 +156,59 @@
     <div id="evidence-log" style="background:#000; color:#ffbf66; font-family:'Share Tech Mono', monospace; padding:1rem; border:1px solid #ffbf66; max-height:400px; overflow-y:auto; white-space:normal; font-size:0.9rem; line-height:1.5;"></div>
 
 <script>
-// ... (no changes above JS functions)
+const ACCESS_CODE = "echo1989";
+
+function checkPassword() {
+  const input = document.getElementById('password').value.trim();
+  const errorBox = document.getElementById('error');
+
+  if (input === ACCESS_CODE) {
+    document.getElementById('auth').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    typeBootSequence();
+  } else {
+    errorBox.textContent = "ACCESS DENIED. INVALID CODE.";
+  }
+}
+
+function typeBootSequence() {
+  const lines = document.querySelectorAll('.line');
+  lines.forEach((line, i) => {
+    setTimeout(() => {
+      line.style.opacity = 1;
+    }, i * 700);
+  });
+}
+
+function parseCSV(text) {
+  const rows = [];
+  let insideQuote = false, row = [], cell = '';
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i], next = text[i + 1];
+
+    if (char === '"' && insideQuote && next === '"') {
+      cell += '"'; i++;
+    } else if (char === '"') {
+      insideQuote = !insideQuote;
+    } else if (char === ',' && !insideQuote) {
+      row.push(cell); cell = '';
+    } else if ((char === '\n' || char === '\r') && !insideQuote) {
+      if (cell || row.length) row.push(cell);
+      if (row.length) rows.push(row);
+      row = [], cell = '';
+      if (char === '\r' && next === '\n') i++;
+    } else {
+      cell += char;
+    }
+  }
+  if (cell || row.length) row.push(cell);
+  if (row.length) rows.push(row);
+  return rows;
+}
+
 function loadLeaderboard() {
-  fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKNJG-yM1vz4leQjfEV8nxLlUEiMuO-H7XRuT1z7CKbIw5ddrUla8pHJc/pub?gid=625344505&single=true&output=csv&cachebuster=' + new Date().getTime())
+fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKNJG-yM1vz4leQjfEV8nxLlUEiMuO-H7XRuT1z7CKbIw5ddrUla8pHJc/pub?gid=146694499&single=true&output=csv&cachebuster=' + new Date().getTime())
     .then(response => response.text())
     .then(csv => {
       const headers = ["Team", "Clue 1", "Clue 2", "Clue 3", "Clue 4", "Clue 5", "Clue 6", "Bonus", "Total"];
@@ -181,7 +231,7 @@ function loadLeaderboard() {
       });
       table.appendChild(headerRow);
 
-      rows.forEach(row => {
+      rows.forEach((row, index) => {
         const tr = document.createElement('tr');
         const relevantCells = [
           row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]
@@ -194,13 +244,80 @@ function loadLeaderboard() {
           td.style.borderBottom = '1px dotted #333';
           tr.appendChild(td);
         });
-
-        table.appendChild(tr);
       });
 
       container.appendChild(table);
     });
 }
+
+function loadEvidenceLog() {
+  const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKNJG-yM1vz4leQjfEV8nxLlUEiMuO-H7XRuT1z7CKbIw5ddrUla8pHJc/pub?gid=960108141&single=true&output=csv&cachebuster=' + new Date().getTime();
+
+  fetch(csvUrl)
+    .then(response => response.text())
+    .then(csv => {
+      const rows = csv.trim().split('\n').map(row => row.split(','));
+      const container = document.getElementById('evidence-log');
+      container.innerHTML = '';
+
+      const headers = rows[0].map(h => h.trim().toLowerCase());
+      const typeIdx = headers.indexOf("type");
+      const titleIdx = headers.indexOf("title");
+      const urlIdx = headers.findIndex(h => h.includes("location") || h.includes("url"));
+      const visibleIdx = headers.indexOf("visible");
+
+      const header = document.createElement('div');
+      header.textContent = '> Type | Title | Location';
+      header.style.fontWeight = 'bold';
+      header.style.marginBottom = '0.5em';
+      container.appendChild(header);
+
+      let evidenceCount = 0;
+
+      for (let i = 1; i < rows.length; i++) {
+        const row = rows[i];
+        if (!row[visibleIdx] || row[visibleIdx].trim() !== "1") continue;
+
+        const type = row[typeIdx]?.trim() || '';
+        const title = row[titleIdx]?.trim() || '';
+        const url = row[urlIdx]?.trim() || '';
+
+        const div = document.createElement('div');
+        let link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.style.color = '#ffbf66';
+        link.style.textDecoration = 'underline';
+
+        if (type.toLowerCase() === 'image' || type.toLowerCase() === 'photo') {
+          link.textContent = `[IMG] ${title}`;
+        } else if (type.toLowerCase() === 'audio') {
+          link.textContent = `[AUDIO] ${title}`;
+        } else {
+          link.textContent = `[FILE] ${title}`;
+        }
+
+        div.textContent = `> ${type} - `;
+        div.appendChild(link);
+        container.appendChild(div);
+
+        evidenceCount++;
+      }
+
+      if (evidenceCount === 0) {
+        const fallback = document.createElement('div');
+        fallback.textContent = '> No new evidence at this time.';
+        fallback.style.opacity = 0.5;
+        fallback.style.fontStyle = 'italic';
+        container.appendChild(fallback);
+      }
+    });
+}
+
+loadLeaderboard();
+setInterval(loadLeaderboard, 120000);
+loadEvidenceLog();
+setInterval(loadEvidenceLog, 45000);
 </script>
 </body>
 </html>
