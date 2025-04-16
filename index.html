@@ -234,24 +234,16 @@ fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTU5yhlTQl1xo08kNUSmKjZKN
       rows.forEach((row, index) => {
         const tr = document.createElement('tr');
         const relevantCells = [
-  row[0],  // Team
-  row[1],  // Clue 1
-  row[2],  // Clue 2
-  row[3],  // Clue 3
-  row[4],  // Clue 4
-  row[5],  // Clue 5
-  row[6],  // Clue 6
-  row[7],  // Bonus
-  row[8]   // Total
-];
+          row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]
+        ];
 
-relevantCells.forEach(cell => {
-  const td = document.createElement('td');
-  td.textContent = cell;
-  td.style.padding = '2px 6px';
-  td.style.borderBottom = '1px dotted #333';
-  tr.appendChild(td);
-});
+        relevantCells.forEach(cell => {
+          const td = document.createElement('td');
+          td.textContent = cell;
+          td.style.padding = '2px 6px';
+          td.style.borderBottom = '1px dotted #333';
+          tr.appendChild(td);
+        });
 
         if (index === 0) tr.style.backgroundColor = '#FFD700';
         if (index === 1) tr.style.backgroundColor = '#C0C0C0';
